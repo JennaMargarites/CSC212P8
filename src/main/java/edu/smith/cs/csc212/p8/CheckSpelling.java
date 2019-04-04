@@ -56,6 +56,8 @@ public class CheckSpelling {
 		// Hint to the ArrayList that it will need to grow to numSamples size:
 		List<String> output = new ArrayList<>(numSamples);
 		// TODO: select numSamples * fractionYes words from yesWords; create the rest as no words.
+		
+		
 		return output;
 	}
 	
@@ -64,18 +66,63 @@ public class CheckSpelling {
 		// --- Load the dictionary.
 		List<String> listOfWords = loadDictionary();
 		
+		// --- How long does it take to inserted the dictionary into the data structure?
+		
+		
 		// --- Create a bunch of data structures for testing:
+		long startTime = System.nanoTime();
 		TreeSet<String> treeOfWords = new TreeSet<>(listOfWords);
+		long endTime = System.nanoTime();
+		double totalTime = (endTime - startTime)/(1e9);
+		System.out.println("TreeSet Insertion Time: " + totalTime + " seconds.");
+		
+		startTime = System.nanoTime();
+		TreeSet<String> addTree = new TreeSet<>();
+		for(String w : listOfWords) {
+			addTree.add(w);
+		}
+		endTime = System.nanoTime();
+		totalTime = (endTime - startTime)/(1e9);
+		System.out.println("TreeSet Insertion Time (using add): " + totalTime + " seconds.");
+		
+		startTime = System.nanoTime();
 		HashSet<String> hashOfWords = new HashSet<>(listOfWords);
+		endTime = System.nanoTime();
+		totalTime = (endTime - startTime)/(1e9);
+		System.out.println("HashSet Insertion Time: " + totalTime + " seconds.");
+		
+		startTime = System.nanoTime();
+		HashSet<String> addHash = new HashSet<>();
+		for(String w : listOfWords) {
+			addHash.add(w);
+		}
+		endTime = System.nanoTime();
+		totalTime = (endTime - startTime)/(1e9);
+		System.out.println("HashSet Insertion Time (using add): " + totalTime + " seconds.");
+		
+		startTime = System.nanoTime();
 		SortedStringListSet bsl = new SortedStringListSet(listOfWords);
+		endTime = System.nanoTime();
+		totalTime = (endTime - startTime)/(1e9);
+		System.out.println("SortedStringListSet Insertion Time: " + totalTime + " seconds.");
+		
+		startTime = System.nanoTime();
 		CharTrie trie = new CharTrie();
 		for (String w : listOfWords) {
 			trie.insert(w);
 		}
+		endTime = System.nanoTime();
+		totalTime = (endTime - startTime)/(1e9);
+		System.out.println("CharTrie Insertion Time: " + totalTime + " seconds.");
+		
+		startTime = System.nanoTime();
 		LLHash hm100k = new LLHash(100000);
 		for (String w : listOfWords) {
 			hm100k.add(w);
 		}
+		endTime = System.nanoTime();
+		totalTime = (endTime - startTime)/(1e9);
+		System.out.println("LLHash Insertion Time: " + totalTime + " seconds.");
 		
 		// --- Make sure that every word in the dictionary is in the dictionary:
 		timeLookup(listOfWords, treeOfWords);
